@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SORIMIX 소리믹스 빙고</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            table-layout: fixed;
+            width: 500px; /* 전체 표 크기를 500x500 픽셀로 설정 */
+            height: 500px; /* 1:1 비율 유지 */
+        }
+        td {
+            width: 20%; /* 5x5 셀로 나누기 위해 20% */
+            height: 20%;
+            border: 1px solid #ccc;
+            text-align: center;
+            vertical-align: middle;
+            position: relative; /* 썸네일 위치 조정을 위한 설정 */
+        }
+        input {
+            width: 90%;
+            margin-bottom: 5px;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 이미지가 셀에 꽉 차도록 설정 */
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer; /* 클릭 가능하도록 커서 변경 */
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .main{
+            margin: auto;
+            text-align: center;
+            width: 400px;
+            background-color: #7EFFA5;
+            padding: 10px;
+            font-size: 30px;
+            border-radius: 15px;
+            color: black;
+            font-family: "Black Han Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="main">
+        <p>SORIMIX 소리믹스 빙고</p>
+    </div>
+    
+    <p>각 칸에 유튜브 링크를 입력하면 자동으로 썸네일이 표시되고, 이미지를 클릭하면 삭제됩니다.</p>
+    <table id="thumbnailTable">
+        <!-- 표는 JavaScript로 생성 -->
+    </table>
+  
+
+    <script>
+        // 유튜브 링크에서 동영상 ID 추출 함수
+        function extractVideoId(url) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s?]+)/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        // 썸네일을 업데이트하는 함수
+        function updateThumbnail(input, img) {
+            const videoId = extractVideoId(input.value.trim());
+            if (videoId) {
+                img.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                img.style.display = "block";
+                input.style.display = "none"; // 입력 필드 숨기기
+            } else {
+                img.style.display = "none";
+                input.style.display = "block"; // 입력 필드 다시 표시
+            }
+        }
+
+        // 이미지를 클릭했을 때 이미지 제거 함수
+        function removeThumbnail(img, input) {
+            img.src = ""; // 이미지 초기화
+            img.style.display = "none"; // 이미지 숨기기
+            input.style.display = "block"; // 입력 필드 다시 표시
+            input.value = ""; // 입력 필드 값 초기화
+        }
+
+        // 표를 5x5로 생성하는 함수
+        function createTable() {
+            const table = document.getElementById('thumbnailTable');
+            for (let row = 0; row < 5; row++) {
+                const tr = document.createElement('tr');
+                for (let col = 0; col < 5; col++) {
+                    const td = document.createElement('td');
+                    const input = document.createElement('input');
+                    const img = document.createElement('img');
+
+                    img.style.display = "none"; // 기본적으로 숨김
+
+                    // 입력 필드 이벤트 리스너 추가
+                    input.addEventListener('input', () => updateThumbnail(input, img));
+
+                    // 이미지 클릭 이벤트 리스너 추가
+                    img.addEventListener('click', () => removeThumbnail(img, input));
+
+                    td.appendChild(input);
+                    td.appendChild(img);
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+        }
+
+        // HTML을 PNG 이미지로 저장하는 함수
+        function saveAsImage() {
+            const table = document.getElementById('thumbnailTable');
+
+            html2canvas(table, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'SORIMIX_빙고.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        // 페이지 로드 시 테이블 생성
+        createTable();
+    </script>
+</body>
+</html>
