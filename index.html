@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <style>
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -60,34 +61,65 @@
         button:hover {
             background-color: #0056b3;
         }
+        .main_text{
+            font-size: 30px;
+            border-radius: 15px;
+            color: black;
+            font-family: "Black Han Sans", sans-serif;
+            text-align: center;
+            background-color: transparent;
+            border: none;
+        }
         .main{
             margin: auto;
             text-align: center;
             width: 400px;
+            height: 98px;
             background-color: #7EFFA5;
             padding: 10px;
             font-size: 30px;
             border-radius: 15px;
             color: black;
             font-family: "Black Han Sans", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+            font-weight: 400;
+            font-style: normal;
+            transition: background-color 0.3s ease;
         }
+        .colorselect{
+            width: 500px;
+            height: 20;
+            background-color: transparent;
+            border: none;
+            margin: none;
+        }
+
         
     </style>
 </head>
 <body>
     <div class="main">
-        <p>SORIMIX 소리믹스 빙고</p>
+        <p>
+            <input class="main_text" type="text" id="bgColor" value="SORIMIX 빙고">
+        </p>
     </div>
     
     <p>각 칸에 유튜브 링크를 입력하면 자동으로 썸네일이 표시되고, 이미지를 클릭하면 삭제됩니다.</p>
     <table id="thumbnailTable">
         <!-- 표는 JavaScript로 생성 -->
     </table>
-  
+
+
+    <input type="color" id="bgg" value="#7EFFA5"class="colorselect">
+
 
     <script>
+        const colorInput = document.getElementById('bgg');
+        const mainDiv = document.querySelector('.main');
+
+        colorInput.addEventListener('input', (e) => {
+        mainDiv.style.backgroundColor = e.target.value;
+    });
+        
         // 유튜브 링크에서 동영상 ID 추출 함수
         function extractVideoId(url) {
             const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s?]+)/;
@@ -159,3 +191,4 @@
     </script>
 </body>
 </html>
+
